@@ -17,13 +17,13 @@ class PaisExtrator(BaseExtrator):
     def __init__(self):
         super().__init__()
         self.writer = BaseWriter() 
-        self.ARQUIVO_PAIS = os.path.join(os.getenv('PASTA_RAW'), "dm_pais.csv.gz")
-        self.ARQUIVO_PAIS_BRONZE = os.path.join(os.getenv('PASTA_BRONZE'), "dm_pais.parquet")
+        self.PAIS_RAW = os.path.join(os.getenv('PASTA_RAW'), "dm_pais.csv.gz")
+        self.PAIS_BRONZE = os.path.join(os.getenv('PASTA_BRONZE'), "dm_pais.parquet")
 
 
     def extrair_pais(self) -> DataFrame:
         return self.ler_csv(
-                    arquivo_csv=self.ARQUIVO_PAIS,
+                    arquivo_csv=self.PAIS_RAW,
                     separador=';',
                     schema=self.schema
                 )
@@ -31,7 +31,7 @@ class PaisExtrator(BaseExtrator):
     def salvar_pais(self, df_dataframe) -> None:
         self.writer.salvar_parquet(
                         df_dataframe=df_dataframe,
-                        path_salvar=self.ARQUIVO_PAIS_BRONZE
+                        path_salvar=self.PAIS_BRONZE
                     )
 
 
