@@ -16,7 +16,7 @@ class BaseExtrator:
     def ler_csv(self, arquivo_csv, separador: str = ';', schema = None) -> DataFrame:
         spark = SparkSession.builder.getOrCreate()
 
-        self.logger.info(f"📖 Iniciando a leitura do arquivo: {arquivo_csv}")
+        self.logger.info(f"📖 Iniciando a leitura do CSV: {arquivo_csv}")
         df = spark.read.csv(
                     arquivo_csv,
                     header=True, 
@@ -24,9 +24,15 @@ class BaseExtrator:
                     schema=schema, 
                     inferSchema = True
             )
-        self.logger.info(f"✅ Leitura do arquivo concluída: {arquivo_csv}")
+        self.logger.info(f"✅ Leitura do CSV concluída: {arquivo_csv}")
         return df
 
+    def ler_parquet(self, arquivo_parquet, schema) -> DataFrame:
+        self.logger.info(f"📖 Iniciando a leitura do PARQUET: {arquivo_parquet}")
+        spark = SparkSession.builder.getOrCreate()
+        df = spark.read.schema(schema).parquet(arquivo_parquet)
+        self.logger.info(f"✅ Leitura do PARQUET concluída: {arquivo_parquet}")
+        return df
 
 if __name__ == '__main__':
     bs = BaseExtrator()
