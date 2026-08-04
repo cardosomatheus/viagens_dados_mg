@@ -1,7 +1,7 @@
 from pyspark.sql.types import StructType, StringType, StructField, IntegerType
 
 
-ESTADO_SCHEMA = StructType([
-    StructField('id_acao', IntegerType(), True),
+CIDADE_SCHEMA = StructType([
+    StructField('id_cidade', IntegerType(), True),
     StructField('nome', StringType(), True)
 ])

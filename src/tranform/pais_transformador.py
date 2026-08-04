@@ -28,10 +28,15 @@ class PaisTransformador(BaseExtrator):
         return self.ler_parquet(arquivo_parquet=self.PAIS_BRONZE,schema=self.schema)
 
 
-    def __limar_nome_pais(self, df_dataframe :DataFrame) -> DataFrame:
+    def __limar_nome_pais(self, df_dataframe: DataFrame) -> DataFrame:
+        sem_acento = f.translate(
+            f.col("nome"),
+            "ÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇáàãâäéèêëíìîïóòõôöúùûüç",
+            "AAAAAEEEEIIIIOOOOOUUUUCaaaaaeeeeiiiiooooouuuuc"
+        )
         return df_dataframe.withColumn(
             "nome_limpo", 
-            f.upper(f.trim(f.regexp_replace(f.col("nome"),"[^a-zA-Z0-9\\s]", "")))
+            f.upper(f.trim(f.regexp_replace(sem_acento, "[^a-zA-Z0-9\\s]", "")))
         )
 
     def __definir_sigla_pais(self, df_dataframe :DataFrame) -> DataFrame:

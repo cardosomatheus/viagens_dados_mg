@@ -29,9 +29,14 @@ class EstadoTransformador(BaseExtrator):
 
 
     def __limpar_nome_estado(self, df_dataframe: DataFrame) -> DataFrame:
+        sem_acento = f.translate(
+            f.col("nome"),
+            "ÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇáàãâäéèêëíìîïóòõôöúùûüç",
+            "AAAAAEEEEIIIIOOOOOUUUUCaaaaaeeeeiiiiooooouuuuc"
+        )
         return df_dataframe.withColumn(
             "nome_limpo", 
-            f.upper(f.trim(f.regexp_replace(f.col("nome"), "[^a-zA-Z0-9\\s]", "")))
+            f.upper(f.trim(f.regexp_replace(sem_acento, "[^a-zA-Z0-9\\s]", "")))
         )
 
     def __definir_sigla_estado(self, df_dataframe: DataFrame) -> DataFrame:
@@ -88,5 +93,3 @@ if __name__ == '__main__':
     estadodf = estado.transformar_estado(df_dataframe=estadodf)
     estado.salvar_estado(estadodf)
     estadodf.show(30)
-
-    
