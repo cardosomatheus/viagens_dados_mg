@@ -1,8 +1,8 @@
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.types import StructType, StringType, StructField, IntegerType
 from pyspark.sql import functions as f
 from src.base.base_extrator import BaseExtrator
 from src.base.base_writer import BaseWriter
+from src.schema.pais_schema import PAIS_SCHEMA
 from src.utils.logger import setup_logger
 from dotenv import load_dotenv
 import os
@@ -14,10 +14,7 @@ load_dotenv()
 
 class PaisTransformador(BaseExtrator):
 
-    schema = StructType([
-                StructField('id_pais', IntegerType(), True),
-                StructField('nome', StringType(), True)
-            ])
+    schema = PAIS_SCHEMA
             
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -60,7 +57,6 @@ class PaisTransformador(BaseExtrator):
                 WHEN 221 THEN 'BS'
                 WHEN 222 THEN 'CU'
                 WHEN 223 THEN 'BZ'
-                ELSE NULL 
             END
         """
         return df_dataframe.withColumn('sigla_pais',f.expr(case_sigla_pais))
@@ -69,6 +65,7 @@ class PaisTransformador(BaseExtrator):
         self.logger.info('🔄 Tranformando dados de PAISES.')
         df_dataframe = self.__definir_sigla_pais(df_dataframe=df_dataframe)
         df_dataframe = self.__limar_nome_pais(df_dataframe=df_dataframe)
+        self.logger.info('🔄 Transformações em PAISES concluidas com sucesso!!!')
         return df_dataframe
     
     def salvar_pais(self, df_dataframe) -> None:

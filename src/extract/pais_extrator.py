@@ -1,19 +1,15 @@
-from pyspark.sql.types import StructType, StringType, StructField, IntegerType
 from pyspark.sql.dataframe import DataFrame
 from src.base.base_extrator import BaseExtrator
 from src.base.base_writer import BaseWriter
+from src.schema.pais_schema import PAIS_SCHEMA
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 class PaisExtrator(BaseExtrator):
+    schema = PAIS_SCHEMA
 
-    schema = StructType([
-                StructField('id_pais', IntegerType(), True),
-                StructField('nome', StringType(), True)
-            ])
-            
     def __init__(self):
         super().__init__()
         self.writer = BaseWriter() 
