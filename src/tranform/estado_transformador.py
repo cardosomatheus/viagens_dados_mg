@@ -69,6 +69,7 @@ class EstadoTransformador(BaseExtrator):
                 WHEN 82 THEN 'SE'
                 WHEN 83 THEN 'SP'
                 WHEN 84 THEN 'TO'
+                ELSE NULL
             END
         """
         return df_dataframe.withColumn('sigla_estado', f.expr(case_sigla_estado))
